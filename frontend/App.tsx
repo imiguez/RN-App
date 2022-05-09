@@ -1,18 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FC } from 'react';
-
-
-const homePage: FC = () => {
-  return (
-    <View style={styles.container}>
-    <Text>Paso</Text>
-    <StatusBar style="auto" />
-  </View>
-  )
-}
+import { homePage } from './src/screens/HomePage'
+import { Profile } from './src/screens/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,8 +12,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='Home' component={homePage} />
-
+        {/* <Stack.Screen name='Home' component={homePage} /> */}
+        <Stack.Screen name='Profile' component={Profile} />
+        
 
 
       </Stack.Navigator>
@@ -35,5 +28,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
   },
 });
