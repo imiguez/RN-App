@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
-import { getUser } from "../apis/dummy-api/Users";
+import { Dimensions, StatusBar, View } from "react-native";
+import { EmptyUser, getUser, User } from "../apis/dummy-api/Users";
 import { ProfileCoverPhotoComp } from "../components/images/ProfileCoverPhotoComp";
 import { ProfilePhotoComp } from "../components/images/ProfilePhotoComp";
+import { ContainerProfile } from "../styles/Containers";
 import { UserName } from "../styles/Texts";
 
 
@@ -10,7 +11,7 @@ import { UserName } from "../styles/Texts";
 export const Profile: FC = () => {
 
 
-    let [user, setUser] = useState([]);
+    let [user, setUser] = useState<User>(EmptyUser);
 
     useEffect(() => {
         getUser("60d0fe4f5311236168a109ca").then(res => {
@@ -19,7 +20,8 @@ export const Profile: FC = () => {
     }, []);
 
     return (
-        <View>
+        <ContainerProfile>
+            <StatusBar/>
 
             <ProfileCoverPhotoComp 
             source={{uri: user.picture}}
@@ -31,7 +33,7 @@ export const Profile: FC = () => {
              style={ImgDimensions.profilePhoto}/>
              <UserName>{user.title} {user.firstName} {user.lastName}</UserName>
 
-        </View>
+        </ContainerProfile>
             
     );
 }

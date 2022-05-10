@@ -19,16 +19,16 @@ interface ImgBgProps extends ImageBackgroundProps {
 }
 
 export const ProfilePhoto = styled.Image<ImgProps>`
-    width: ${ props => props.style ? props.style.width + '' : "40px"};
-    height: ${ props => props.style ? props.style.height + '' : "40px"};
-    border-radius: ${ props => props.style ? props.style.width + '' : "20px"}
+    width: ${ props => props.style ? props.style.width + "px" : "40px"};
+    height: ${ props => props.style ? props.style.height + 'px' : "40px"};
+    border-radius: ${ props => props.style ? props.style.width + 'px' : "20px"}
 `
 
 export const BigProfilePhoto = styled(ProfilePhoto)`
-    margin-top: ${ props => (props.style.height / 2)* -1 };
-    margin-left: ${ props => (Dimensions.get('window').width / 2) - (props.style.height / 2) };
+    margin-top: ${ props => ((props.style.height / 2)* -1) + "px"};
     border: 2px solid white;
 `
+// margin-left: ${ props => ((Dimensions.get('window').width / 2) - (props.style.height / 2)) + "px" };
 
 
 export const ProfileCoverPhoto = styled.ImageBackground<ImgBgProps>`

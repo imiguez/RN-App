@@ -1,5 +1,47 @@
 import { apiData } from "./QueryData";
 
+export interface User {
+  "id": String,
+    "title": String,
+    "firstName": String,
+    "lastName": String,
+    "picture": String,
+    "gender": String,
+    "email": String,
+    "dateOfBirth": String,
+    "phone": String,
+    "location": {
+        "street": String,
+        "city": String,
+        "state": String,
+        "country": String,
+        "timezone": String
+    },
+    "registerDate": String,
+    "updatedDate": String
+}
+
+export const EmptyUser: User = {
+    "id": "",
+      "title": "",
+      "firstName": "",
+      "lastName": "",
+      "picture": "",
+      "gender": "",
+      "email": "",
+      "dateOfBirth": "",
+      "phone": "",
+      "location": {
+          "street": "",
+          "city": "",
+          "state": "",
+          "country": "",
+          "timezone": ""
+      },
+      "registerDate": "",
+      "updatedDate": ""
+}
+
 /*      GET   ->   /user       */
 export const getUsers = async () => {
   const response = await fetch(apiData['baseUrl'] + '/user', {
