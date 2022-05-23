@@ -18,7 +18,12 @@ interface ImgBgProps extends ImageBackgroundProps {
     }
 }
 
-export const ProfilePhoto = styled.Image<ImgProps>`
+export const BasicImage = styled.Image<ImgProps>`
+    margin: 0px;
+    padding: 0px;
+`
+
+export const ProfilePhoto = styled(BasicImage)`
     width: ${ props => props.style ? props.style.width + "px" : "40px"};
     height: ${ props => props.style ? props.style.height + 'px' : "40px"};
     border-radius: ${ props => props.style ? props.style.width + 'px' : "20px"}
@@ -27,6 +32,7 @@ export const ProfilePhoto = styled.Image<ImgProps>`
 export const BigProfilePhoto = styled(ProfilePhoto)`
     margin-top: ${ props => ((props.style.height / 2)* -1) + "px"};
     border: 2px solid white;
+    background-color: white;
 `
 // margin-left: ${ props => ((Dimensions.get('window').width / 2) - (props.style.height / 2)) + "px" };
 

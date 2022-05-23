@@ -1,24 +1,24 @@
 import { apiData } from "./QueryData";
 
 export interface User {
-  "id": String,
-    "title": String,
-    "firstName": String,
-    "lastName": String,
-    "picture": String,
-    "gender": String,
-    "email": String,
-    "dateOfBirth": String,
-    "phone": String,
+  "id": string,
+    "title": string,
+    "firstName": string,
+    "lastName": string,
+    "picture": string,
+    "gender": string,
+    "email": string,
+    "dateOfBirth": string,
+    "phone": string,
     "location": {
-        "street": String,
-        "city": String,
-        "state": String,
-        "country": String,
-        "timezone": String
+        "street": string,
+        "city": string,
+        "state": string,
+        "country": string,
+        "timezone": string
     },
-    "registerDate": String,
-    "updatedDate": String
+    "registerDate": string,
+    "updatedDate": string
 }
 
 export const EmptyUser: User = {
@@ -26,7 +26,7 @@ export const EmptyUser: User = {
       "title": "",
       "firstName": "",
       "lastName": "",
-      "picture": "",
+      "picture": "../../assets/default-user-photo.png",
       "gender": "",
       "email": "",
       "dateOfBirth": "",

@@ -13,6 +13,7 @@ export const Profile: FC = () => {
 
     let [user, setUser] = useState<User>(EmptyUser);
 
+
     useEffect(() => {
         getUser("60d0fe4f5311236168a109ca").then(res => {
             setUser(user = res);

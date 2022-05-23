@@ -1,33 +1,12 @@
-import { FC, useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
-import { getUsers } from "../apis/dummy-api/Users";
+import React, { FC } from "react";
+import { Button } from "react-native";
+import { LateralMenuComp } from "../components/containers/LateralMenuComp";
+import { ScreenProps } from "./ScreenUtils";
 
-export const homePage: FC = () => {
-  
-    let [users, setUsers] = useState([]);
+export const HomePage: FC<ScreenProps> = (props) => {
 
-    useEffect(() => {
-        getUsers().then(res => {
-            setUsers(users = res.data);
-        })
-    }, []);
 
     return (
-        <View >
-            <FlatList
-            data={users}
-            renderItem={({item}) => {
-                return <Text style={styles.item}>{item.title +" "+ item.firstName +" "+ item.lastName}</Text>
-            }}/> 
-        </View>
-    );
+        <LateralMenuComp/>
+    )
 }
-
-  
-const styles = StyleSheet.create({
-    item: {
-        padding: 10,
-        fontSize: 18,
-        height: 44,
-      }
-});
