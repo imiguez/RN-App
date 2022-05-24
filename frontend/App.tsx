@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Animated, Button, StyleSheet, Text, View } from 'react-native';
+import { Animated, Button, Easing, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer, StackActions, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomePage } from './src/screens/HomePage'
@@ -17,71 +17,72 @@ export const LateralMenuContext = React.createContext({
   HandleTheme: () => {console.log("")}
 });
 
+interface AppState {
+  theme: DefaultTheme,
+  isLight: boolean,
+  isOptionsDisplayed: boolean,
+  position: Animated.Value
+}
+
 export default function App() {
   const navigationRef = useNavigationContainerRef();
 
-  let isOptionsDisplayed = useRef(false).current;
-  const position = useRef(new Animated.Value(width)).current;
-  
-  let [theme, setTheme] = useState<DefaultTheme>(LightTheme);
-  const isLight = useRef(true);
+  let [state, setState] = useState<AppState>({
+    theme: LightTheme,
+    isLight: true,
+    isOptionsDisplayed: false,
+    position: new Animated.Value(width)
+  });
   
   const HandleTheme = () => {
-    setTheme(isLight.current ? theme = DarkTheme : theme = LightTheme);
-    isLight.current = !isLight.current;
+    setState(state = {
+      theme: (state.isLight ? state.theme = DarkTheme : state.theme = LightTheme),
+      isLight: !state.isLight,
+      isOptionsDisplayed: state.isOptionsDisplayed,
+      position: state.position
+    });
   }
   
   const ToggleOptions = () => {
-    isOptionsDisplayed = !isOptionsDisplayed;
-    if (isOptionsDisplayed) {
-      Animated.timing(position, {
+    setState(state = {
+      theme: state.theme,
+      isLight: state.isLight,
+      isOptionsDisplayed: !state.isOptionsDisplayed,
+      position: state.position
+    });
+    if (state.isOptionsDisplayed) {
+      Animated.timing(state.position, {
         toValue: width/100*30, 
         duration: 500,
+        easing: Easing.linear,
         useNativeDriver: false
       }).start();
     } else {
-      Animated.timing(position, {
+      Animated.timing(state.position, {
         toValue: width, 
         duration: 500,
+        easing: Easing.linear,
         useNativeDriver: false
       }).start();
     }
   }
   
   return (
-    <LateralMenuContext.Provider value={{position: position, HandleTheme: HandleTheme}}>
-      <ThemeProvider theme={theme}>
+    <LateralMenuContext.Provider value={{position: state.position, HandleTheme: HandleTheme}}>
+      <ThemeProvider theme={state.theme}>
         <NavigationContainer ref={navigationRef} fallback={<Text>Loading...</Text>}>
           <Stack.Navigator screenOptions={{
-            headerTintColor: theme.colors.text,
-            headerStyle: {backgroundColor: theme.colors.primary},
+            headerTintColor: state.theme.colors.text,
+            headerStyle: {backgroundColor: state.theme.colors.primary},
             headerTitleStyle: {fontWeight: 'bold'},
             headerRight: () => (
               <Button onPress={ToggleOptions} title={"press"}></Button>
               ),}}>
               <Stack.Screen name='Home' component={HomePage}/>
-            <Stack.Screen name='Profile' component={Profile} />
+            <Stack.Screen name='Profile' component={Profile}/>
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>
   </LateralMenuContext.Provider>
   );
 }
-
-              {/* <LateralMenuComp position={position}>
-                <Button onPress={() => HandleTheme()} title="Config" color="#918F8C" />
-              </LateralMenuComp> */}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-});

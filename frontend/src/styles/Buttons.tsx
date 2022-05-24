@@ -8,3 +8,7 @@ export const ThemeButton = styled.TouchableOpacity`
     background-color: ${ props => props.theme.colors.hardContrast };
     color: ${ props => props.theme.colors.text };
 `
+
+export const UserListedButton = styled.TouchableOpacity`
+    flex-direction: row;
+`

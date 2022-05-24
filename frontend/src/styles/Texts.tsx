@@ -3,7 +3,8 @@ import styled from "styled-components/native";
 const fonts = {
     header: "20px",
     normal: "12px",
-    big: "18px",
+    big: "16px",
+    bigger: "18px",
     small: "8px"
 }
 
@@ -15,12 +16,14 @@ export const BasicText = styled.Text`
 
 export const UserName = styled(BasicText)`
     font-weight: bold;
-    font-size: ${fonts.big};
+    font-size: ${fonts.bigger};
 `
 
 export const UserNamesList = styled(BasicText)`
-    font-size: ${fonts.normal};
-    padding-left: 10px;
+    font-size: ${fonts.big};
+    padding: 10px;
     textAlignVertical: center;
+    font-weight: bold;
 `
-// max-width: 200px;
+        // fontSize: 18,
+        // height: 44,
