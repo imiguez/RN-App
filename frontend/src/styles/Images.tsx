@@ -1,10 +1,11 @@
 import { ReactNode } from "react";
 import styled from "styled-components/native";
 import { Dimensions, ImageBackgroundProps, ImageProps } from "react-native";
+import { width } from "./Utils";
 
 export interface ImgProps extends ImageProps {
     children?: ReactNode,
-    style: {
+    style?: {
         width: number,
         height: number
     }
@@ -12,9 +13,9 @@ export interface ImgProps extends ImageProps {
 
 interface ImgBgProps extends ImageBackgroundProps {
     children?: ReactNode,
-    style: {
-        width: number,
-        height: number
+    style?: {
+        width: number | undefined,
+        height: number | undefined
     }
 }
 
@@ -22,22 +23,21 @@ export const BasicImage = styled.Image<ImgProps>`
     margin: 0px;
     padding: 0px;
 `
-
 export const ProfilePhoto = styled(BasicImage)`
     width: ${ props => props.style ? props.style.width + "px" : "40px"};
     height: ${ props => props.style ? props.style.height + 'px' : "40px"};
     border-radius: ${ props => props.style ? props.style.width + 'px' : "20px"}
 `
-
+export const ProfileCoverPhoto = styled.ImageBackground<ImgBgProps>`
+    border-color: white;
+    border-bottom-width: 2px;
+`
 export const BigProfilePhoto = styled(ProfilePhoto)`
-    margin-top: ${ props => ((props.style.height / 2)* -1) + "px"};
-    border: 2px solid white;
+    margin-top: ${ props => props.style ? ((props.style.height / 2)* -1) + "px" : "0px"};
+    border-color: white;
+    border-bottom-width: 2px;
     background-color: white;
 `
-// margin-left: ${ props => ((Dimensions.get('window').width / 2) - (props.style.height / 2)) + "px" };
-
-
-export const ProfileCoverPhoto = styled.ImageBackground<ImgBgProps>`
-    border-bottom-color: white;
-    border-bottom-width: 2px;
+export const PostImage = styled(BasicImage)`
+    margin: 0 32px 32px 32px;
 `

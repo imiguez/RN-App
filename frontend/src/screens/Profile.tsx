@@ -1,64 +1,57 @@
-import { useNavigation } from "@react-navigation/native";
-import { FC, ReactNode, useEffect, useState } from "react";
-import { Dimensions, StatusBar, View, Text } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { FC, useEffect, useRef, useState } from "react";
+import { Dimensions, StatusBar, View, Text, ScrollView, FlatList } from "react-native";
 import { getPostById, Post } from "../apis/dummy-api/Posts";
 import { EmptyUser, getUser, User } from "../apis/dummy-api/Users";
+import { PostContainerComp } from "../components/containers/PostContainerComp";
 import { ProfileCoverPhotoComp } from "../components/images/ProfileCoverPhotoComp";
 import { ProfilePhotoComp } from "../components/images/ProfilePhotoComp";
+import { NavigatorParams } from "../MainNavigation";
 import { ContainerProfile } from "../styles/Containers";
 import { UserName } from "../styles/Texts";
 
-interface ProfileProps {
-    children?: ReactNode,
-    route: {
-        params: {
-            id: string
-        }
-    }
-}
 
-export const Profile: FC<ProfileProps> = ({ route }) => {
+type ProfileProps = NativeStackScreenProps<NavigatorParams, "Profile">;
 
-    let [user, setUser] = useState<User>(EmptyUser);
-    let [posts, setPosts] = useState<Post[]>([]);
+export const Profile: FC<ProfileProps> = ({ route, navigation }) => {
 
+    let [state, setState] = useState<{posts: Post[], user: User}>({posts: [], user: EmptyUser});
+    
     useEffect(() => {
-        getUser(route.params.id).then(res => {
-            setUser(user = res);
-        });
         getPostById(route.params.id).then(res => {
-            setPosts(posts = res.data);
+            setState(state = {
+                posts: res.data,
+                user: (res.data.length > 0 ? res.data[0].owner : getUser(route.params.id).then(res => {return res}))
+            });
         });
-        console.log(posts);
     }, []);
 
     return (
         <View>
             <ContainerProfile>
-                <StatusBar/>
-
                 <ProfileCoverPhotoComp 
-                source={{uri: user.picture}}
-                style={ImgDimensions.profileCoverPhoto}>
+                source={{uri: state.user.picture}}
+                style={ImgDimensions.profileCoverPhoto} >
 
                 </ProfileCoverPhotoComp>
                 <ProfilePhotoComp
-                source={{uri: user.picture}}
-                style={ImgDimensions.profilePhoto}/>
-                <UserName>{user.title} {user.firstName} {user.lastName}</UserName>
+                source={{uri: state.user.picture}}
+                style={ImgDimensions.profilePhoto} />
+                <UserName>{state.user.title} {state.user.firstName} {state.user.lastName}</UserName>
 
             </ContainerProfile>
-            <View>
-                {posts.length == 0 ?
-                    <Text>Loading...</Text> 
-                :
-                    <Text>{posts[0].image }</Text>
-                }
-            </View>
+            {!state.posts ?
+             <Text>Loading...</Text> 
+            :
+             <FlatList 
+              data={state.posts}
+              initialNumToRender={5}
+              renderItem={({item}) => <PostContainerComp post={item}/>}
+              keyExtractor={(item) => item.id}/>
+            }
         </View>
     );
 }
-
 
 const ImgDimensions = {
     "profilePhoto": {

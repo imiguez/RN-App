@@ -1,10 +1,11 @@
 import React, { FC } from "react";
-import { Button } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LateralMenuComp } from "../components/containers/LateralMenuComp";
-import { ScreenProps } from "./ScreenUtils";
+import { NavigatorParams } from "../MainNavigation";
 
-export const HomePage: FC<ScreenProps> = (props) => {
+type HomeProps = NativeStackNavigationProp<NavigatorParams, "Home">;
 
+export const HomePage: FC<HomeProps> = (props) => {
 
     return (
         <LateralMenuComp/>

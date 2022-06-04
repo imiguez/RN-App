@@ -1,6 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { FC } from "react";
 import { User } from "../../apis/dummy-api/Users";
+import { NavigatorParams } from "../../MainNavigation";
 import { UserListedButton } from "../../styles/Buttons";
 import { InLineUserContainer } from "../../styles/Containers";
 import { ProfilePhoto } from "../../styles/Images";
@@ -13,7 +15,7 @@ interface UserListedButtonProps {
 
 export const UserListedButtonComp: FC<UserListedButtonProps> = props => {
     
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<NavigatorParams>>();
 
     return (
         <InLineUserContainer>

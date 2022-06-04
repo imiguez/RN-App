@@ -1,11 +1,9 @@
-import React, { ReactNode, FC, useState, useEffect } from "react";
-import { Animated, FlatList, ViewProps, StyleSheet, Text } from "react-native";
-import { LateralMenuContext } from "../../../App";
+import React, { FC, useState, useEffect } from "react";
+import { Animated, FlatList, Text } from "react-native";
+//import { LateralMenuContext } from "../../../App";
 import { User, getUsers } from "../../apis/dummy-api/Users";
+import { LateralMenuContext } from "../../hooks/LateralMenuContext";
 import { ThemeButton } from "../../styles/Buttons";
-import { InLineUserContainer } from "../../styles/Containers";
-import { ProfilePhoto } from "../../styles/Images";
-import { UserNamesList } from "../../styles/Texts";
 import { UserListedButtonComp } from "../buttons/UserListedContainer";
 
 

@@ -21,3 +21,11 @@ export const InLineUserContainer = styled(BasicContainer)`
     background-color: ${ props => props.theme.colors.softContrast };
     padding: 10px;
 `
+export const PostContainer = styled(BasicContainer)`
+    width: ${ width +'px'};
+    flex-direction: column;
+    border-bottom-color: ${ props => props.theme.colors.border };
+    border-bottom-width: 1px;
+`
+    // background-color: ${ props => props.theme.colors.softContrast };
+    // margin: 15px ${ width/100*5 +'px'};
