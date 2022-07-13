@@ -6,7 +6,7 @@ import { width } from "./Utils";
 
 
 export const UsersList = styled.FlatList`
-    width: ${width/100*70};
-    position: absolute;
-    left: ${width};
-`
+    width: ${width};
+    `
+    // position: absolute;
+    // left: ${width};

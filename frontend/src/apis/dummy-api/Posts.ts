@@ -12,6 +12,12 @@ export interface Post {
     owner: User
 }
 
+export interface Posts {
+    data: Post[],
+    total?: number,
+    page?: number,
+    limit?: number
+}
 
 export const getPostById = async (id: string) => {
     const response = await fetch(apiData.baseUrl+'/user/'+id+'/post', {
@@ -19,6 +25,16 @@ export const getPostById = async (id: string) => {
             'Content-Type': 'application/json;charset=utf-8',
             'app-id': apiData["app-id"]
           },
+    });
+    return await response.json();
+}
+
+export const getPosts = async () => {
+    const response = await fetch(apiData.baseUrl+'/post', {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'app-id': apiData["app-id"]
+        },
     });
     return await response.json();
 }

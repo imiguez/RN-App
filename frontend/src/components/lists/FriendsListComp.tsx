@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { Animated, FlatList, Text } from "react-native";
+import { Animated, FlatList, Text, View } from "react-native";
 //import { LateralMenuContext } from "../../../App";
 import { User, getUsers } from "../../apis/dummy-api/Users";
 import { LateralMenuContext } from "../../hooks/LateralMenuContext";
@@ -7,7 +7,7 @@ import { ThemeButton } from "../../styles/Buttons";
 import { UserListedButtonComp } from "../buttons/UserListedContainer";
 
 
-export const LateralMenuComp: FC = (props) => {
+export const FriendsListComp: FC = (props) => {
   
     let [users, setUsers] = useState<User[]>([]);
 
@@ -18,6 +18,13 @@ export const LateralMenuComp: FC = (props) => {
     }, []);
 
     return (
+        <FlatList
+            data={users}
+            renderItem={ ({item}) => <UserListedButtonComp user={item}/>}
+            keyExtractor={item => item.id} />
+    );
+
+    /*
         <LateralMenuContext.Consumer>{({position, HandleTheme}) => (
                 <Animated.View style={[{ left: position}]}>
                     { props.children }
@@ -29,5 +36,5 @@ export const LateralMenuComp: FC = (props) => {
                 </Animated.View>
             )}
         </LateralMenuContext.Consumer>
-    );
+    */
 }

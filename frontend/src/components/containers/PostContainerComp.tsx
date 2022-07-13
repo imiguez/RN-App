@@ -1,5 +1,4 @@
 import { FC, PureComponent, ReactNode, useEffect, useRef, useState } from "react";
-import { NavigationContainerRefWithCurrent } from "@react-navigation/native";
 import { ViewProps, Image, ImageSourcePropType } from "react-native";
 import { Post } from "../../apis/dummy-api/Posts";
 import { PostContainer } from "../../styles/Containers";

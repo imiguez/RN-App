@@ -1,4 +1,4 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { DrawerScreenProps } from "@react-navigation/drawer";
 import { FC, useEffect, useRef, useState } from "react";
 import { Dimensions, StatusBar, View, Text, ScrollView, FlatList } from "react-native";
 import { getPostById, Post } from "../apis/dummy-api/Posts";
@@ -6,25 +6,26 @@ import { EmptyUser, getUser, User } from "../apis/dummy-api/Users";
 import { PostContainerComp } from "../components/containers/PostContainerComp";
 import { ProfileCoverPhotoComp } from "../components/images/ProfileCoverPhotoComp";
 import { ProfilePhotoComp } from "../components/images/ProfilePhotoComp";
-import { NavigatorParams } from "../MainNavigation";
+import { NavigatorParams } from "../navigators/MainNavigation";
 import { ContainerProfile } from "../styles/Containers";
 import { UserName } from "../styles/Texts";
 
 
-type ProfileProps = NativeStackScreenProps<NavigatorParams, "Profile">;
+type ProfileProps = DrawerScreenProps<NavigatorParams, "Profile">;
+
 
 export const Profile: FC<ProfileProps> = ({ route, navigation }) => {
 
     let [state, setState] = useState<{posts: Post[], user: User}>({posts: [], user: EmptyUser});
-    
     useEffect(() => {
         getPostById(route.params.id).then(res => {
             setState(state = {
                 posts: res.data,
-                user: (res.data.length > 0 ? res.data[0].owner : getUser(route.params.id).then(res => {return res}))
+                user: (res.data.length > 0 ? res.data[0].owner : getUser(route.params.id).then(res => {return res})),
             });
         });
-    }, []);
+    }, [route]);
+    console.log(route+ " Profile ");
 
     return (
         <View>
