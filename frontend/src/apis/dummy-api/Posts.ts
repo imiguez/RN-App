@@ -1,5 +1,5 @@
 import { apiData } from "./QueryData";
-import { User } from "./Users";
+import { EmptyUser, User } from "./Users";
 
 export interface Post {
     id: string,
@@ -18,6 +18,21 @@ export interface Posts {
     page?: number,
     limit?: number
 }
+
+export const EmptyPost: Post = {
+    id: '',
+    text: '',
+    image: '',
+    likes: 0,
+    link: '',
+    tags: [''],
+    publishDate: '',
+    owner: EmptyUser
+}
+
+// export const EmptyPosts: Posts = {
+
+// }
 
 export const getPostById = async (id: string) => {
     const response = await fetch(apiData.baseUrl+'/user/'+id+'/post', {

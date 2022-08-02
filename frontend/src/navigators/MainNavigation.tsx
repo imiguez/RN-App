@@ -54,7 +54,7 @@ export const MainNavigation: FC<NavigationProps> = ({state}) => {
           <Drawer.Screen name='Profile' options={{title: 'Profile'}} component={Profile}/>
           <Drawer.Screen name='Chats' component={Chats} />
           <Drawer.Screen name='Chat' component={Chat} options={({ route }) => ({
-            headerTitle: route.name,
+            title: 'Chat',
           })}/>
         </Drawer.Navigator>
       </NavigationContainer>

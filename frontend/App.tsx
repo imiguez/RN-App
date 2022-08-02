@@ -9,12 +9,6 @@ import { width } from './src/styles/Utils';
 import { MainNavigation } from './src/navigators/MainNavigation';
 import { LateralMenuContext } from './src/hooks/LateralMenuContext';
 
-
-// export const LateralMenuContext = React.createContext({
-//   position: new Animated.Value(width),
-//   HandleTheme: () => {console.log("")}
-// });
-
 export interface AppState {
   theme: DefaultTheme,
   isLight: boolean,
@@ -28,7 +22,7 @@ export default function App() {
     isLight: true,
   });
   
-  const HandleTheme = () => {
+  const SwitchTheme = () => {
     setState(state = {
       theme: (state.isLight ? state.theme = DarkTheme : state.theme = LightTheme),
       isLight: !state.isLight,
@@ -36,7 +30,7 @@ export default function App() {
   }
   
   return (
-    <LateralMenuContext.Provider value={{HandleTheme: HandleTheme}}>
+    <LateralMenuContext.Provider value={{HandleTheme: SwitchTheme}}>
       <ThemeProvider theme={state.theme}>
         <MainNavigation state={state}/>
       </ThemeProvider>

@@ -1,4 +1,5 @@
 import { DrawerScreenProps } from "@react-navigation/drawer";
+import { useIsFocused } from "@react-navigation/native";
 import { FC, useEffect, useRef, useState } from "react";
 import { Dimensions, StatusBar, View, Text, ScrollView, FlatList } from "react-native";
 import { getPostById, Post } from "../apis/dummy-api/Posts";
@@ -17,15 +18,19 @@ type ProfileProps = DrawerScreenProps<NavigatorParams, "Profile">;
 export const Profile: FC<ProfileProps> = ({ route, navigation }) => {
 
     let [state, setState] = useState<{posts: Post[], user: User}>({posts: [], user: EmptyUser});
+
     useEffect(() => {
+        setState(state = {
+            posts: [],
+            user: EmptyUser
+        });
         getPostById(route.params.id).then(res => {
             setState(state = {
                 posts: res.data,
                 user: (res.data.length > 0 ? res.data[0].owner : getUser(route.params.id).then(res => {return res})),
             });
         });
-    }, [route]);
-    console.log(route+ " Profile ");
+    }, [route.params.id]);
 
     return (
         <View>
@@ -42,7 +47,7 @@ export const Profile: FC<ProfileProps> = ({ route, navigation }) => {
 
             </ContainerProfile>
             {!state.posts ?
-             <Text>Loading...</Text> 
+             <Text>{state.user.firstName} {state.user.lastName} hasn't posted yet.</Text> 
             :
              <FlatList 
               data={state.posts}

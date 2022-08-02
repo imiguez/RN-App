@@ -1,11 +1,11 @@
-import { FC, PureComponent, ReactNode, useEffect, useRef, useState } from "react";
-import { ViewProps, Image, ImageSourcePropType } from "react-native";
+import { PureComponent, ReactNode} from "react";
+import { Image} from "react-native";
 import { Post } from "../../apis/dummy-api/Posts";
-import { PostContainer } from "../../styles/Containers";
+import { InLineUserContainer, PostContainer } from "../../styles/Containers";
 import { PostImage } from "../../styles/Images";
 import { PostText } from "../../styles/Texts";
-import { UserListedButtonComp } from "../buttons/UserListedContainer";
 import { width } from "../../styles/Utils";
+import { GoToUserProfileButtonComp } from "../buttons/GoToUserProfileButton";
 
 type PostContainerProps = {
     children?: ReactNode,
@@ -37,11 +37,13 @@ export class PostContainerComp extends PureComponent<PostContainerProps, PostSta
             }});
         });
     }
-    
+
     render(): ReactNode {
         return (
             <PostContainer key={this.props.post.id.toString()}>
-                <UserListedButtonComp user={this.props.post.owner} ></UserListedButtonComp>
+                <InLineUserContainer>
+                    <GoToUserProfileButtonComp user={this.props.post.owner} />
+                </InLineUserContainer>
                 <PostText>{this.props.post.text}</PostText>
                 <PostImage source={{uri: this.props.post.image}} style={this.state.dimensions}></PostImage>
             </PostContainer>

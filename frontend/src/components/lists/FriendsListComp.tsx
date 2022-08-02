@@ -1,10 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
-import { Animated, FlatList, Text, View } from "react-native";
-//import { LateralMenuContext } from "../../../App";
+import { FlatList } from "react-native";
 import { User, getUsers } from "../../apis/dummy-api/Users";
-import { LateralMenuContext } from "../../hooks/LateralMenuContext";
-import { ThemeButton } from "../../styles/Buttons";
-import { UserListedButtonComp } from "../buttons/UserListedContainer";
+import { InLineUserContainer } from "../../styles/Containers";
+import { GoToUserChatButtonComp } from "../buttons/GoToUserChatButton";
 
 
 export const FriendsListComp: FC = (props) => {
@@ -20,7 +18,10 @@ export const FriendsListComp: FC = (props) => {
     return (
         <FlatList
             data={users}
-            renderItem={ ({item}) => <UserListedButtonComp user={item}/>}
+            renderItem={ ({item}) => (
+            <InLineUserContainer>
+                <GoToUserChatButtonComp user={item} />
+            </InLineUserContainer>)}
             keyExtractor={item => item.id} />
     );
 

@@ -9,6 +9,7 @@ export const ThemeButton = styled.TouchableOpacity`
     color: ${ props => props.theme.colors.text };
 `
 
-export const UserListedButton = styled.TouchableOpacity`
+export const GoToUserButton = styled.TouchableOpacity`
+    width: 100%;
     flex-direction: row;
 `
