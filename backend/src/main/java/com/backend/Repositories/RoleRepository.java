@@ -8,4 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
+    public boolean existsRoleByRoleName(String roleName);
+
 }

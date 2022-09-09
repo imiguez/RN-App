@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController @RequestMapping("/api")
+@RestController
 public class UserController {
 
     @Autowired
     private UserService userService;
-
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
@@ -25,14 +24,22 @@ public class UserController {
         return ResponseEntity.ok().body(userService.findUserById(id));
     }
 
-    @PostMapping(path = "/user",
+    @PostMapping(path = "/register",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public User insertUser(@RequestBody User user) {
-        System.out.println(user);
-        User newUser = userService.saveUser(user);
-        System.out.println(newUser);
-        return newUser;
+    public ResponseEntity<User> insertUser(@RequestBody User user) {
+        return ResponseEntity.ok().body(userService.insertUser(user));
+    }
+
+    @GetMapping(path = "/user/{userId}/add-role/{roleId}")
+    public ResponseEntity<User> editUser(@PathVariable("userId") Long userId, @PathVariable("roleId") Long roleId) {
+        return ResponseEntity.ok().body(userService.addRoleToUser(userId, roleId));
+    }
+
+    @DeleteMapping(path = "/admin/user/{id}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
 }
