@@ -14,13 +14,11 @@ public class CustomException extends RuntimeException {
 
     private Date timestamp;
     private HttpStatus status;
-    private List<CustomException> nestedExceptions;
 
     public CustomException(String message, HttpStatus status) {
         super(message);
         this.status = status;
         this.timestamp = new Date();
-        this.nestedExceptions = new ArrayList<>();
         log.info(message);
     }
 

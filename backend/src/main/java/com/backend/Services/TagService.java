@@ -11,19 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-@Service @Slf4j
+@Service @Slf4j @Transactional
+
 public class TagService {
     @Autowired
     private TagRepository tagRepo;
 
-    @Transactional
     public Tag findTagById(Long id) {
         return this.tagRepo.findById(id).orElseThrow(
                 () -> new NotFoundException("tag", "id",id.toString())
         );
     }
 
-    @Transactional
     public Tag insertTag(Tag tag) {
         if (tagRepo.existsTagByName(tag.getName()))
             throw new ConflictException("Tag with name '"+tag.getName()+"' already exists.");

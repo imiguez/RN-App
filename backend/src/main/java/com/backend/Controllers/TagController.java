@@ -7,19 +7,21 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+import javax.validation.Valid;
+
+@RestController @RequestMapping("/tags")
 public class TagController {
 
     @Autowired
     private TagService tagService;
 
-    @GetMapping("tag/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Tag> getTagById(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(tagService.findTagById(id));
     }
 
-    @PostMapping(path = "tag", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> insertTag(@RequestBody Tag tag) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Tag> insertTag(@Valid @RequestBody Tag tag) {
         return ResponseEntity.ok().body(tagService.insertTag(tag));
     }
 

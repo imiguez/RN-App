@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,8 +23,10 @@ public class Product {
     @ManyToMany(mappedBy = "productsTagged", fetch = FetchType.LAZY)
     private List<Tag> tags = new ArrayList<>();
 
-    @Column
+    @Size(max = 255, message = "The description must have less than 255 characteres.")
+    @Column()
     private String description;
+
     @Column(columnDefinition = "MEDIUMBLOB")
     private String image;
     @Column(name = "creation_date", nullable = false, updatable = false)
