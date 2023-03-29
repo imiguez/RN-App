@@ -4,21 +4,20 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.*;
 
-@Entity @Table(name = "user") @Data //@JsonIgnoreProperties("hibernateLazyInitializer")
+@Entity @Table(name = "users") @Data
 public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(updatable = false)
     private Long id;
 
     @NotEmpty @Size(min = 4, max = 25, message = "The username must have between 4 and 25 characters.")
     @Column(unique = true,
-            columnDefinition = "VARCHAR(25) not null, CONSTRAINT CHK_username CHECK(LENGTH(username) >= 4 AND LENGTH(username) < 25)")
+        columnDefinition = "VARCHAR(25) not null, CONSTRAINT CHK_username CHECK(LENGTH(username) >= 4 AND LENGTH(username) < 25)")
     private String username;
 
     @NotEmpty @Email
@@ -28,20 +27,14 @@ public class User implements UserDetails {
     @NotEmpty @Size(min = 8, message = "The password must have at least 8 characters.")
     @Column(nullable = false)
     private String password;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ElementCollection(targetClass = Role.class)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "roles", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_roles")
-    private List<Role> roles;
-
-    /*@ManyToMany()
-    @JoinTable(name = "users_role",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles = new ArrayList<>();*/
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "creation_date", nullable = false, updatable = false)
     private Date creationDate;
@@ -53,10 +46,17 @@ public class User implements UserDetails {
         this.username = username;
     }
 
-    public Boolean hasRole(Role role) {
-        return this.roles.contains(role);
+    public User(String email) {
+        this.email = email;
     }
 
+    public boolean addRole(Role role) {
+        return this.roles.add(role);
+    }
+
+    public boolean hasRole(Role role) {
+        return this.roles.contains(role);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

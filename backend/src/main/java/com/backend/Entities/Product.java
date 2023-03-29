@@ -15,10 +15,10 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
     private User owner;
-
+*/
     @JsonIgnore
     @ManyToMany(mappedBy = "productsTagged", fetch = FetchType.LAZY)
     private List<Tag> tags = new ArrayList<>();
@@ -27,8 +27,8 @@ public class Product {
     @Column()
     private String description;
 
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String image;
+    @Column(columnDefinition = "BYTEA")
+    private byte[] image;
     @Column(name = "creation_date", nullable = false, updatable = false)
     private Date creationDate;
 

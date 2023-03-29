@@ -1,4 +1,4 @@
-package com.backend.Controllers;
+package com.backend.ApiControllers;
 
 import com.backend.Entities.Tag;
 import com.backend.Services.TagService;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController @RequestMapping("/tags")
+@RestController @RequestMapping("/api/tags")
 public class TagController {
 
     @Autowired

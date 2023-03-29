@@ -1,91 +1,65 @@
 package com.backend.Security;
 
+import com.backend.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.List;
-
-@Configuration @EnableWebSecurity @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Configuration @EnableWebSecurity @EnableGlobalMethodSecurity(
+        securedEnabled = true, // Permits the @Secured() in the controllers
+        jsr250Enabled = true, // Permits the @RolesAllowed() in the controllers
+        prePostEnabled = true)
 public class SecurityConfig {
+
+    @Autowired
+    private JwtAuthorizationFilter jwtAuthorizationFilter;
+
+
     @Bean
-    public UserDetailsService users() {
-        // The builder will ensure the passwords are encoded before saving in memory
-        User.UserBuilder users = User.withDefaultPasswordEncoder();
-        UserDetails user = users
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-        UserDetails admin = users
-                .username("admin")
-                .password("password")
-                .roles("USER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService())
+                .passwordEncoder(getBCryptPasswordEncoder())
+                .and().build();
     }
-
-    @Autowired
-    private JwtFilter jwtFilter;
-
-    @Autowired
-    private JwtAuthenticationProvider jwtAuthenticationProvider;
-
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public UserDetailsService userDetailsService() {
+        return new UserService();
+    }
+    @Bean
+    public BCryptPasswordEncoder getBCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager(http));
+        jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http
-            .cors()
-            .and()
-            .csrf()
-            .disable()
-            .authorizeHttpRequests((auth) -> {
-                try {
-                    auth
-                        .antMatchers("/sign-up")
-                        .permitAll()
-                        .antMatchers("/login")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
-                        .and()
-                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .cors().and().csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .authorizeHttpRequests(auth -> {
+            try {
+                auth
+                    .antMatchers("/api/sign-up").permitAll()
+                    .antMatchers("/api/login").permitAll()
+                    .anyRequest().authenticated();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            })
-                /*.formLogin(form -> form
-        .loginPage("/login")
-        .permitAll()
-)*/
-            .httpBasic(Customizer.withDefaults())
-            .authenticationManager(new ProviderManager(List.of(jwtAuthenticationProvider)));
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            });
+        http.addFilter(jwtAuthenticationFilter);
+        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-
 
 }

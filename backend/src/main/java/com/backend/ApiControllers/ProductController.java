@@ -1,4 +1,4 @@
-package com.backend.Controllers;
+package com.backend.ApiControllers;
 
 import com.backend.Entities.Product;
 import com.backend.Services.ProductService;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController @RequestMapping("/products")
+@RestController @RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
