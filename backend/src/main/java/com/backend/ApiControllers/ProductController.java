@@ -2,13 +2,12 @@ package com.backend.ApiControllers;
 
 import com.backend.Entities.Product;
 import com.backend.Services.ProductService;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController @RequestMapping("/api/products")
 public class ProductController {

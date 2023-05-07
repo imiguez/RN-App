@@ -1,7 +1,6 @@
 package com.backend.Security;
 
 import com.backend.Services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +12,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+
+import static com.backend.Security.CustomDSL.customDsl;
 
 @Configuration @EnableWebSecurity @EnableGlobalMethodSecurity(
         securedEnabled = true, // Permits the @Secured() in the controllers
@@ -21,15 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         prePostEnabled = true)
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthorizationFilter jwtAuthorizationFilter;
-
-
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService())
-                .passwordEncoder(getBCryptPasswordEncoder())
+                .passwordEncoder(getPassWordEncoder())
                 .and().build();
     }
     @Bean
@@ -37,28 +35,28 @@ public class SecurityConfig {
         return new UserService();
     }
     @Bean
-    public BCryptPasswordEncoder getBCryptPasswordEncoder() {
+    public BCryptPasswordEncoder getPassWordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+/*    @Bean
+    public BasicAuthenticationEntryPoint getBasicAuthenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }*/
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager(http));
-        jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
+        /*JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager(http));
+        jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");*/
         http
             .cors().and().csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .authorizeHttpRequests(auth -> {
-            try {
-                auth
-                    .antMatchers("/api/sign-up").permitAll()
-                    .antMatchers("/api/login").permitAll()
-                    .anyRequest().authenticated();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        http.addFilter(jwtAuthenticationFilter);
-        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+            .authorizeHttpRequests()
+            .requestMatchers("/api/sign-up").permitAll()
+            .requestMatchers("/api/login").permitAll()
+            .anyRequest().authenticated();
+
+        http.apply(customDsl());
         return http.build();
     }
 

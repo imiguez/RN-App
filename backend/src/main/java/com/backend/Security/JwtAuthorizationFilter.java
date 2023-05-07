@@ -1,6 +1,9 @@
 package com.backend.Security;
 
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,10 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.Set;
 @Slf4j
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -40,12 +38,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     });
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities);
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                } else {
-                    response.sendError(403, "403 Forbidden, you dont have permissions.");
-                }
-            }
+                }/* else {
+                    response.sendError(400, "Invalid jwt, probably expired.");
+                }*/
+            }/* else
+                response.sendError(400, "Bearer authorization header not provided.");*/
         }
 
         filterChain.doFilter(request, response);
     }
+
+
 }

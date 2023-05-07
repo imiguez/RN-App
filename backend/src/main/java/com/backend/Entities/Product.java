@@ -1,15 +1,16 @@
 package com.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity @Table(name = "product") @Data
+@Entity
+@Table(name = "product") @Data
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(nullable = false, updatable = false)

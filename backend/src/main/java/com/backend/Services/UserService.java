@@ -25,10 +25,8 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepo;
 
     @Override
-    public User loadUserByUsername(String email) {
-        User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No user found with email: " + email));
-        return user;
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepo.findByEmail(email).orElseThrow();
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
